@@ -1,0 +1,6 @@
+// using the application plugin allows us
+// to use a java class as base entry point for the "run" task
+apply plugin: 'application'
+
+// We should define the base class to call on the "run" task
+mainClassName = "Example"

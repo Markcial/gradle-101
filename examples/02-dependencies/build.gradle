@@ -1,0 +1,13 @@
+apply plugin: 'groovy'
+apply plugin: 'application'
+
+mainClassName = "Application"
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  compile 'org.codehaus.groovy:groovy-all:2.4.10'
+  compile group: 'org.joda', name: 'joda-money', version: '0.12'
+}
