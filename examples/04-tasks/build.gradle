@@ -1,0 +1,31 @@
+apply plugin: 'groovy'
+
+dependencies {
+  compile localGroovy()
+}
+
+jar {
+  from { 
+    configurations.runtime.collect { 
+      it.isDirectory() ? it : zipTree(it).matching { 
+        exclude "**/*.zip" 
+      }
+    }
+  }
+  manifest {
+    attributes 'Main-Class': 'Application'
+  }
+}
+
+task run(dependsOn: ['jar']) {
+  doLast {
+    println "Authoring jar"
+  }
+}
+
+task executeJar(type: Exec, dependsOn: 'run') {
+  commandLine  "java", 
+              "-cp", 
+              file('build/libs/04.jar'), 
+              "Application"
+}

@@ -1,0 +1,23 @@
+apply plugin: 'java'
+
+dependencies {
+  compile 'org.clojure:clojure:1.9.0'
+}
+
+task installLein {
+  def leinScriptUrl = "https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein"
+  def f = new File('./bin/lein')
+
+  if (!f.exists()) {
+    new URL(leinScriptUrl).withInputStream{
+      i -> f.withOutputStream{ it << i }
+    }
+    f.setExecutable(true)
+  }
+}
+
+task uberjar(type: Exec, dependsOn: ["installLein"]) {
+  commandLine "./bin/lein", "uberjar"
+}
+
+build.dependsOn uberjar

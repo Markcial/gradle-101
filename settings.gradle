@@ -17,7 +17,13 @@ include 'services:webservice'
 */
 
 include 'examples:01-application', 
-        'examples:02-dependencies'
+        'examples:02-dependencies',
+        'examples:03-crosslang',
+        'examples:03-crosslang:worlds:groovy',
+        'examples:03-crosslang:worlds:scala',
+        'examples:03-crosslang:worlds:kotlin',
+        'examples:04-tasks'
+
 
 project(":examples").children.each {
   it.name = it.name.split("-")[0]
