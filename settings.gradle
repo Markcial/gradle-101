@@ -22,7 +22,9 @@ include 'examples:01-application',
         'examples:03-crosslang:worlds:groovy',
         'examples:03-crosslang:worlds:scala',
         'examples:03-crosslang:worlds:kotlin',
-        'examples:04-tasks'
+        'examples:04-tasks',
+        'examples:05-ant',
+        'examples:06-php'
 
 
 project(":examples").children.each {

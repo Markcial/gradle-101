@@ -1,0 +1,8 @@
+ant.importBuild 'build.xml'
+
+
+task run (dependsOn: 'salute') {
+  doLast {
+    println "Calling ant task from gradle"
+  }
+}

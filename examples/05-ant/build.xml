@@ -1,0 +1,19 @@
+<project name="AntProject" default="build" basedir=".">
+  <description>
+    simple example build file
+  </description>
+  <!-- set global properties for this build -->
+  <property name="salutation" value="Hey whats up?!"/>
+
+  <target name="salute">
+    <echo>${salutation}</echo>
+  </target>
+
+  <target name="compile" depends="salute">
+    <echo>Running compilation step</echo>
+  </target>
+
+  <target name="build" depends="compile">
+    <echo>Running build step</echo>
+  </target>
+</project>

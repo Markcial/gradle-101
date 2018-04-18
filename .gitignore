@@ -1,6 +1,10 @@
+# general folders
 bin/
 build/
-
+cache/
+# gradle or java related
 .gradle/
-
 *.jar
+# php related
+vendor/
+

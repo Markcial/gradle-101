@@ -1,0 +1,96 @@
+task getComposer << {
+  def composerScript = "https://getcomposer.org/download/1.6.4/composer.phar"
+  def f = new File("${projectDir}/bin/composer")
+
+  if (!f.exists()) {
+    new URL(composerScript).withInputStream{
+      i -> f.withOutputStream{ it << i }
+    }
+    f.setExecutable(true)
+  }
+}
+
+task getSfDeps(dependsOn: 'getComposer') << {
+  def username = ["whoami"].execute().text.trim()
+  // get uid
+  def uid = ["id", "-u", username].execute().text.trim()
+  // get gid
+  def gid = ["id", "-g", username].execute().text.trim()
+
+  new ByteArrayOutputStream().withStream { os ->
+    exec {
+      commandLine "docker"
+      args "run", "-d", "-v", "${projectDir}:/build",
+        "-w", "/build", "php:7", "sleep", "infinity"
+      standardOutput = os
+    }
+    ext.phpContainerId = os.toString().trim()
+  }
+  println "update apt-get cache on container"
+  exec {
+    commandLine "docker"
+    args "exec", phpContainerId, "apt-get", "-y", "update"
+  }
+  // install extension required binaries
+  def libraries = ["zlib1g-dev", "libxml2-dev"]
+  println "Installing libraries ${libraries} on ${phpContainerId}"
+  exec {
+    def arguments = [
+      "exec", phpContainerId, "apt-get", "-y", "install",
+      *libraries
+    ]
+    println arguments
+    commandLine "docker"
+    args arguments
+    // stop that chatty logs
+    standardOutput = new ByteArrayOutputStream()
+  }
+  // install extensions
+  def extensions = ["zip", "xml"]
+  println "Installing php extensions ${extensions} on ${phpContainerId}"
+  exec {
+    def arguments = [
+      "exec", phpContainerId, "docker-php-ext-install", *extensions
+    ]
+    commandLine "docker"
+    args arguments
+    // stop that chatty logs
+    standardOutput = new ByteArrayOutputStream()
+  }
+  println "Running composer install"
+  exec {
+    def arguments = [
+      "exec", "-u${uid}:${gid}", phpContainerId, "bin/composer", "install"
+    ]
+    commandLine "docker"
+    args arguments
+  }
+  println "Removing container used for build"
+  exec {
+    commandLine "docker"
+    args "stop", phpContainerId
+  }
+  exec {
+    commandLine "docker"
+    args "rm", phpContainerId
+  }
+}
+
+task phpServer(type: Exec) << {
+  commandLine "docker"
+  args "run", "-d", 
+    "-p8080:80",
+    "-v${projectDir}:/app",
+    "-w/app", "php:7", 
+    "php", "-S", "0.0.0.0:80"
+  doLast {
+    exec {
+      commandLine "xdg-open"
+      args "http://localhost:8080"
+    }
+  }
+}
+
+task run << {
+  println "Php task"
+}
