@@ -8,3 +8,5 @@ cache/
 # php related
 vendor/
 
+.cache/
+node_modules/

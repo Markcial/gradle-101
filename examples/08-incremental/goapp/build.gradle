@@ -1,0 +1,4 @@
+task build(type: Exec) {
+  commandLine "go"
+  args "build", "-o", "build/app", "main.go"
+}

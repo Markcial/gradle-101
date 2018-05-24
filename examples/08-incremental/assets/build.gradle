@@ -1,0 +1,4 @@
+task build(type: Exec) {
+  commandLine "parcel"
+  args "build", "index.html"
+}

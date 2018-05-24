@@ -1,0 +1,4 @@
+task run(type: Exec, dependsOn: ['assets:build', 'goapp:build']) {
+  commandLine "goapp/build/app"
+  args "-d", "assets/dist"
+}

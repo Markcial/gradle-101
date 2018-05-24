@@ -24,7 +24,12 @@ include 'examples:01-application',
         'examples:03-crosslang:worlds:kotlin',
         'examples:04-tasks',
         'examples:05-ant',
-        'examples:06-php'
+        'examples:06-php',
+        'examples:07-plugins',
+        'examples:08-incremental',
+        'examples:08-incremental:assets',
+        'examples:08-incremental:goapp'
+
 
 
 project(":examples").children.each {
